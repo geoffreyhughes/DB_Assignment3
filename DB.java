@@ -24,7 +24,7 @@ public class DB {
 
     public Connection conn = null;
     private String mySQLdriver = "com.mysql.cj.jdbc.Driver";
-    private String mySQLconnection = "jdbc:mysql://206.211.151.0/24:3306/assignment3";
+    private String mySQLconnection = "jdbc:mysql://35.203.181.112:3306/assignment3?useSSL=false";
     private String mySQLusername = "user";
     private String mySQLpassword = "chapman";
 

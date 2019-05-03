@@ -24,7 +24,17 @@ public class DB {
 
     public Connection conn = null;
     private String mySQLdriver = "com.mysql.cj.jdbc.Driver";
+    //You gonna need to delete the driver and reload it java:6.0.6 so its without the cj
+
+    //private String mySQLconnection = "jdbc:mysql://206.211.151.0/24:3306/assignment3";
+
+    //private String mySQLconnection = "jdbc:mysql://206.211.151.23:3306/assignment3?useSSL=false";
+
     private String mySQLconnection = "jdbc:mysql://35.203.181.112:3306/assignment3?useSSL=false";
+
+
+
+
     private String mySQLusername = "user";
     private String mySQLpassword = "chapman";
 
@@ -62,13 +72,20 @@ public class DB {
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
-            stmt.execute("CREATE TABLE IF NOT EXISTS Books(bookID int PRIMARY KEY NOT NULL IDENTITY, authorID int NOT NULL IDENTITY, titleID int);");
-            stmt.execute("CREATE TABLE IF NOT EXISTS Authors(authorID int PRIMARY KEY NOT NULL IDENTITY, firstNameID int NOT NULL IDENTITY, lastNameID int NOT NULL IDENTITY);");
-            stmt.execute("CREATE TABLE IF NOT EXISTS FirstNames(firstNameID int PRIMARY KEY NOT NULL IDENTITY, firstName varchar(25));");
-            stmt.execute("CREATE TABLE IF NOT EXISTS LastNames(lastNameID int PRIMARY KEY NOT NULL IDENTITY, lastName varchar(25));");
-            stmt.execute("CREATE TABLE IF NOT EXISTS Titles(titleID int PRIMARY KEY NOT NULL IDENTITY, title varchar(35));");
 
+            //stmt.execute("DROP TABLE Books");
 
+            stmt.execute("CREATE TABLE IF NOT EXISTS Users(UserID int NOT NULL AUTO_INCREMENT, Username varchar(40) NOT NULL, BookID int, PRIMARY KEY (UserID))");
+
+            stmt.execute("CREATE TABLE IF NOT EXISTS Books(BookID int NOT NULL AUTO_INCREMENT, Title varchar(40) NOT NULL, AuthorID int NOT NULL, GenreID int NOT NULL, PRIMARY KEY (BookID))");
+
+            stmt.execute("CREATE TABLE IF NOT EXISTS Authors(AuthorID int NOT NULL AUTO_INCREMENT, FirstName varchar(25) NOT NULL, LastName varchar(25), Age int NOT NULL, NativeLanguage varchar(20), PRIMARY KEY (AuthorID))");
+
+            stmt.execute("CREATE TABLE IF NOT EXISTS Genres(GenreID int NOT NULL AUTO_INCREMENT, Genre varchar(30) NOT NULL, AboutGenre varchar(50), PRIMARY KEY (GenreID))");
+
+            stmt.execute("CREATE TABLE IF NOT EXISTS Publishers(PublisherID int NOT NULL AUTO_INCREMENT, Publisher varchar(30) NOT NULL, YearEstablished int, PRIMARY KEY (PublisherID))");
+
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -97,20 +114,27 @@ public class DB {
                 last_name = scan.next();
                 title = scan.next();
 
-                java.sql.PreparedStatement insertFirstName = conn.prepareStatement("INSERT INTO FirstNames" +
-                        "(firstName) VALUE (?)");
 
-                insertFirstName.setString(1, first_name);
+                java.sql.PreparedStatement insertBook = conn.prepareStatement("INSERT INTO Books," +
+                                "(BookID, FirstName, LastName, Age, NativeLangauge) VALUES (?, ?, ?, ?, ?)");
 
-                java.sql.PreparedStatement insertLastName = conn.prepareStatement("INSERT INTO FirstNames" +
-                        "(firstName) VALUE (?)");
+                insertBook.setString(2, first_name);
+                insertBook.setString(3, last_name);
+                insertBook.setString(4, "5");
+                insertBook.setString(5, title);
+
+
+                /*
+                java.sql.PreparedStatement insertLastName = conn.prepareStatement("INSERT INTO LastNames" +
+                        "(last_name) VALUE (?)");
 
                 insertLastName.setString(1, last_name);
 
-                PreparedStatement insertTitle = conn.prepareStatement("INSERT INTO FirstNames" +
-                        "(firstName) VALUE (?)");
+                PreparedStatement insertTitle = conn.prepareStatement("INSERT INTO Titles" +
+                        "(title) VALUE (?)");
 
                 insertTitle.setString(1, title);
+                */
 
             }
 
